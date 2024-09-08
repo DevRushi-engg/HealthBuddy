@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthBuddy</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e3f2fd; /* Light blue background */
+            color: #333; /* Dark text color for contrast */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure body takes full viewport height */
+        }
+        header {
+            background-color: #90caf9; /* Medium blue for the header */
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        header h1 {
+            color: #003366; /* Darkest blue for HealthBuddy name */
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #64b5f6; /* Medium blue for the nav */
+        }
+        nav a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+        }
+        nav a:hover {
+            background-color: #42a5f5; /* Slightly darker blue for hover effect */
+        }
+        .container {
+            padding: 20px;
+            flex: 1; /* Take available space between header and footer */
+        }
+        .center-text {
+            text-align: center; /* Center-align text */
+        }
+        .center-text h2, .center-text p {
+            color: #003d6b; /* Dark blue text color */
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #64b5f6; /* Medium blue border for input fields */
+            border-radius: 4px;
+        }
+        /* Center and style the predict button */
+        .predict-button {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 24px;
+            background-color: #f28b82; /* Light red color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .predict-button:hover {
+            background-color: #e57373; /* Darker red on hover */
+        }
+        /* Popup Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; 
+            z-index: 1; /* Sits on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            background-color: rgba(0,0,0,0.5); /* Black with opacity */
+        }
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+            animation: slideInUp 0.5s ease; /* Unique slide-in animation */
+        }
+        .close-button {
+            color: #333;
+            float: right;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        /* Popup animation */
+        @keyframes slideInUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .icon-buttons {
+            display: flex;
+            justify-content: space-around; /* Distribute buttons evenly */
+            flex-wrap: wrap; /* Wrap buttons to next line if needed */
+            margin-top: 20px;
+        }
+        .icon-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #1565c0; /* Dark blue for buttons */
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            width: 120px;
+            text-align: center;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+        .icon-button:hover {
+            background-color: #0d47a1; /* Darker blue for button hover effect */
+        }
+        .icon-button span {
+            font-size: 2rem; /* Larger icon size */
+        }
+        footer {
+            background-color: #90caf9; /* Medium blue for the footer */
+            color: white;
+            text-align: center;
+            padding: 5px 0; /* Reduced padding */
+            font-size: 0.8rem; /* Smaller font size */
+            flex-shrink: 0; /* Ensures footer stays at the bottom */
+        }
+        /* Responsive styling */
+        @media screen and (max-width: 768px) {
+            .icon-button {
+                width: 45%;
+            }
+        }
+        @media screen and (max-width: 480px) {
+            .icon-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>HealthBuddy</h1>
+    </header>
+    <div class="container" id="home">
+        <div class="center-text">
+            <h2>Welcome to HealthBuddy</h2>
+            <p>Get personalized healthcare recommendations based on your symptoms.</p>
+        </div>
+    </div>
+    <div class="container" id="symptoms">
+        <h2>Enter Your Symptoms</h2>
+        <form>
+            <div class="form-group">
+                <label for="symptoms">Symptoms</label>
+                <textarea id="symptoms" name="symptoms" rows="4" required></textarea>
+            </div>
+            <!-- Predict Button added below symptom input -->
+            <button class="predict-button" type="button" onclick="openModal('Prediction', 'XYZ prediction of disease based on your symptoms.')">Predict</button>
+        </form>
+    </div>
+    <div class="container" id="recommendations">
+        <h2 class="center-text">AI BASED RECOMMENDATION</h2>
+        <div class="icon-buttons">
+            <a href="#" class="icon-button" onclick="openModal('Disease Diagnosed', 'XYZ disease is diagnosed based on your symptoms.')">
+                <span>📝</span> <!-- Disease Description Icon -->
+                <p>Disease Description</p>
+            </a>
+            <a href="#" class="icon-button" onclick="openModal('Precaution', 'XYZ medication needed for diagnosed disease.')">
+                <span>💊</span> <!-- Medication Icon -->
+                <p>Medication</p>
+            </a>
+            <a href="#" class="icon-button" onclick="openModal('Medication', 'XYZ precautions needed for diagnosed disease.')">
+                <span>⚠️</span> <!-- Precaution Icon -->
+                <p>Precaution</p>
+            </a>
+            <a href="#" class="icon-button" onclick="openModal('Workout', 'XYZ Workout or Fitness needed for diagnosed disease.')">
+                <span>🏋️</span> <!-- Workout Icon -->
+                <p>Workouts</p>
+            </a>
+            <a href="#" class="icon-button" onclick="openModal('Diet', 'XYZ Diets necessary for diagnosed disease.')">
+                <span>🍎</span> <!-- Diet Icon -->
+                <p>Diets</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- The Modal for dynamic content -->
+    <div id="dynamicModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <h3 id="modal-title"></h3>
+            <p id="modal-body"></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 HealthBuddy. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Open the modal and dynamically set content
+        function openModal(title, body) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-body').innerText = body;
+            document.getElementById('dynamicModal').style.display = 'block';
+        }
+
+        // Close the modal
+        function closeModal() {
+            document.getElementById('dynamicModal').style.display = 'none';
+        }
+
+        // Close the modal when clicking outside of it
+        window.onclick = function(event) {
+            var modal = document.getElementById('dynamicModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
